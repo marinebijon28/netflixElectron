@@ -1,0 +1,26 @@
+{
+  "name": "netflixelectron",
+  "version": "1.0.0",
+  "description": "netflix electron",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marinebijon28/netflixElectron.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marinebijon28/netflixElectron/issues"
+  },
+  "homepage": "https://github.com/marinebijon28/netflixElectron#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.1",
+    "bootstrap": "^4.5.3",
+    "electron": "^11.0.4",
+    "jquerry": "^2.0.0"
+  }
+}
