@@ -34,15 +34,13 @@ app.whenReady().then(() => {
         request = net.request('http://127.0.0.1:8000/api/movies?pages=1');
 
         request.on('response', (response) => {
-           // console.log(`STATUS: ${response.statusCode}`)
-           // console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
+            console.log(`STATUS: ${response.statusCode}`)
+            console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
             if (response.statusCode === 200)
             // send the main data movie
-            response.on('data-main', (body) => {
-                console.log(`BODY: ${body}`)
-                    //mainWindow.send('store-data', ({
-                  //  movies: body
-                //}));
+            response.on('data', (body) => {
+                console.log(`${body}`);
+                    mainWindow.send('data-main', `${body}`);
             });
             // response.on('end', () => {
             //     console.log('No more data in response.')
