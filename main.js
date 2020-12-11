@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, net } = require('electron');
 
 // Function for create window
 function createWindow(pathFile, widthWindow = 1200, heightWindow = 800) {
@@ -31,6 +31,24 @@ app.whenReady().then(() => {
     // Only the first time the win is loaded we send data
     // It is responsible for rendering and controlling a web page and is a property of the BrowserWindow object.
     mainWindow.webContents.once('did-finish-load', () => {
-    mainWindow.send('store-data');
+        request = net.request('http://127.0.0.1:8000/api/movies?pages=1');
+
+        request.on('response', (response) => {
+           // console.log(`STATUS: ${response.statusCode}`)
+           // console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
+            if (response.statusCode === 200)
+            // send the main data movie
+            response.on('data-main', (body) => {
+                console.log(`BODY: ${body}`)
+                    //mainWindow.send('store-data', ({
+                  //  movies: body
+                //}));
+            });
+            // response.on('end', () => {
+            //     console.log('No more data in response.')
+            // });
+        });
+        
+        request.end();
     });
 });
