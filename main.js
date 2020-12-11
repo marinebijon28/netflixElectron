@@ -36,11 +36,12 @@ app.whenReady().then(() => {
         request.on('response', (response) => {
             console.log(`STATUS: ${response.statusCode}`)
             console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
+
             if (response.statusCode === 200)
             // send the main data movie
             response.on('data', (body) => {
-                console.log(`${body}`);
-                    mainWindow.send('data-main', `${body}`);
+                console.log(JSON.parse(`${body}`));
+                mainWindow.send('data-main', JSON.parse(`${body}`));
             });
             // response.on('end', () => {
             //     console.log('No more data in response.')

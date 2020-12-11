@@ -4,7 +4,6 @@ $('#serviceCode').on('click', () => {
     $('#serviceCode').html("104-941")
 });
 
- ipcRenderer.on('data-main', (event, data) => {
-    
-    console.log(data);
- });
+ipcRenderer.on('data-main', (event, data) => {
+    console.log(data['hydra:member']);
+});
