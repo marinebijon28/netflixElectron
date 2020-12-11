@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+
+            <title>Application Netflix</title>
+
+            <!-- download core CSS -->
+            <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="../../node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet">
+
+        </head>
+
+<body>
+<!-- header -->
+<header>
+    <h1>ENregistrement</h1>
+</header>
+
+<body>
+<form method="post" class="registerForm">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign upp</h1>
+    <label for="inputEmail">Email</label>
+    <input type="email" name="email" id="inputEmail" class="form-control" required autofocus>
+    <label for="inputPassword">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" required>
+    <label for="firstName">Nom de famille</label>
+    <input type="text" name="firstName" id="firstName" class="form-control" required>
+    <label for="lastName">Prenom</label>
+    <input type="text" name="lastName" id="lastName" class="form-control" required>
+    <label for="pseudo">Pseudo</label>
+    <input type="text" name="pseudo" id="pseudo" class="form-control" required>
+    <label for="picture">Avatar</label>
+    <input type="text" name="picture" id="picture" class="form-control" required>
+    <label for="birthday">Date de naissance</label>
+    <input type="date" name="birthday" id="birthday" class="form-control" required>
+
+    <button class="btn btn-lg btn-primary" type="submit">
+        Sign in
+    </button>
+</form>
+</body>
+
+<script>
+    window.jquery = window.$ = require('jquery');
+    require('bootstrap');
+</script>
+
+<script src="register.js"></script>
