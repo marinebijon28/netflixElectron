@@ -94,6 +94,21 @@ class Carousel{
         })
     }
 
+    /**
+     * Remove button pagination where changing the resolution
+     * @param {String} classname 
+     */
+    removeButton(classname) {
+        let buttonsOld;
+        if ((buttonsOld = document.querySelectorAll(classname)))
+        {    
+            console.log(buttonsOld)
+            buttonsOld.forEach(element => {
+                element.remove()
+            });
+        }
+    }
+
      /**
      * Crée la pagination dans le DOM
      */
@@ -103,14 +118,7 @@ class Carousel{
         this.root.appendChild(pagination)
         if (this.isMobile)
         {   
-            let buttonsOld;
-            if ((buttonsOld = document.querySelectorAll(".carousel__pagination__button")))
-            {    
-                console.log(buttonsOld)
-                buttonsOld.forEach(element => {
-                    element.remove()
-                });
-            }
+            removeButton(".carousel__pagination__button") 
 
             for (let i = 0; i < this.items.length; i = i + this.slidesToScroll)
             {
@@ -128,15 +136,8 @@ class Carousel{
             })
         }
         else {
-            let buttonsOld;
-            if ((buttonsOld = document.querySelectorAll(".carousel__pagination__IsMobile__button")))
-            {    
-                console.log(buttonsOld)
-                buttonsOld.forEach(element => {
-                    element.remove()
-                });
-            }
-
+            this.removeButton(".carousel__pagination__IsMobile__button")
+        
             for (let i = 0; i < this.items.length; i = i + this.slidesToScroll)
             {
                 let button = this.createDivWithClass('carousel__pagination__button')
