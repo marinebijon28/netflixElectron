@@ -1,53 +1,54 @@
-const { app, BrowserWindow, ipcMain, net } = require('electron');
+'use strict';
+const electron = require('electron');
+const app = electron.app;  // Module to control application life.
+const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 
-// Function for create window
-function createWindow(pathFile, widthWindow = 1200, heightWindow = 800) {
-    // Create window
-    let win = new BrowserWindow({
-        width: widthWindow,
-        height: heightWindow,
-        webPreferences: {
-            nodeIntegration : true,
-            enableRemoteModule: true,
-            // delete devTools for le packager
-            //devTools: false
-        },
-    })
-    // load file html page
-    win.loadFile(pathFile);
+var gulp = require('gulp'),
+    connect = require('gulp-connect-php'),
+    browserSync = require('browser-sync');
 
-    // listener's of event closed window 
-    win.on('closed', () => {
-        win = null;
-    })
-
-    return win;
-}
-
-// Create the window
-app.whenReady().then(() => {
-    mainWindow = createWindow('views/login/login.html');
-
-    // Only the first time the win is loaded we send data
-    // It is responsible for rendering and controlling a web page and is a property of the BrowserWindow object.
-    mainWindow.webContents.once('did-finish-load', () => {
-        request = net.request('http://127.0.0.1:8000/api/movies?pages=1');
-
-        request.on('response', (response) => {
-            console.log(`STATUS: ${response.statusCode}`)
-            console.log(`HEADERS: ${JSON.stringify(response.headers)}`)
-
-            if (response.statusCode === 200)
-            // send the main data movie
-            response.on('data', (body) => {
-                console.log(JSON.parse(`${body}`));
-                mainWindow.send('data-main', JSON.parse(`${body}`));
-            });
-            // response.on('end', () => {
-            //     console.log('No more data in response.')
-            // });
+gulp.task('connect-sync', function() {
+    connect.server({}, function (){
+        browserSync({
+            proxy: '127.0.0.1:8000'
         });
-        
-        request.end();
+    });
+
+    gulp.watch('**/*.php').on('change', function () {
+        browserSync.reload();
+    });
+});
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow;
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function () {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+app.on('ready', function() {
+    // Create the browser window.
+    mainWindow = new BrowserWindow({width: 900, height: 600});
+
+    // and load the app's front controller. Feel free to change with app_dev.php
+    mainWindow.loadURL("http://127.0.0.1:8000/account");
+
+    // Uncomment to open the DevTools.
+    //mainWindow.webContents.openDevTools();
+
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function () {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null;
     });
 });
