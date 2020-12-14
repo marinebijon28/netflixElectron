@@ -26,7 +26,7 @@ function createWindow(pathFile, widthWindow = 1200, heightWindow = 800) {
 
 // Create the window
 app.whenReady().then(() => {
-    mainWindow = createWindow('views/register/register.html');
+    mainWindow = createWindow('views/login/login.html');
 
     // Only the first time the win is loaded we send data
     // It is responsible for rendering and controlling a web page and is a property of the BrowserWindow object.

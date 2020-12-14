@@ -7,3 +7,5 @@ $('#serviceCode').on('click', () => {
 ipcRenderer.on('data-main', (event, data) => {
     console.log(data['hydra:member']);
 });
+
+console.log("User : " + localStorage.getItem("User"));
