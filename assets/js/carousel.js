@@ -28,6 +28,11 @@ class Carousel{
         let children = [].slice.call(element.children)
         this.currentItem = 0
         this.isMobile = false
+        this.offset = 0
+        this.start = this.slidesVisible % 2 
+        if (this.slidesVisible == 1)
+            this.start = 0
+        this.pagination = 0
         this.root = this.createDivWithClass('carousel')
         this.container = this.createDivWithClass('carousel__container')
         this.root.setAttribute("tabindex", "0")
@@ -42,6 +47,9 @@ class Carousel{
 
         // Test
         this.itemsOld = this.items
+        this.maxPagination = Math.ceil((this.itemsOld.length / this.slidesToScroll))  - this.start
+        console.log("maxPagination : " + this.maxPagination)
+        console.log(this.start)
 
         if (this.options.infinite) {
             this.offset = this.options.slidesVisible * 2 - 1
@@ -133,20 +141,22 @@ class Carousel{
     createPagination(){
         let pagination = this.createDivWithClass('carousel__pagination')
         let buttons = [] 
+        let count = this.items.length - 2 * this.offset
         this.root.appendChild(pagination)
         if (this.isMobile)
         {   
             this.removeButton(".carousel__pagination__button") 
 
-            for (let i = 0; i < this.items.length; i = i + this.slidesToScroll)
+            for (let i = 0; i < ((this.items.length - 2 * this.offset) - this.start); i = i + this.slidesToScroll)
             {
                 let button = this.createDivWithClass('carousel__pagination__IsMobile__button')
-                button.addEventListener('click', () => this.gotoItem(i))
+                button.addEventListener('click', () => this.gotoItem(i + this.offset))
                 pagination.appendChild(button)
                 buttons.push(button);
             }
             this.onMove(index => {
-                let activeButton = buttons[Math.floor(index / this.slidesToScroll)]
+//                let activeButton = buttons[Math.floor(((index - this.offset)  %count) / this.slidesToScroll)]
+                let activeButton = buttons[this.pagination]
                 if (activeButton) {
                     buttons.forEach(button => button.classList.remove('carousel__pagination__IsMobile__button--active'))
                     activeButton.classList.add('carousel__pagination__IsMobile__button--active')
@@ -155,16 +165,17 @@ class Carousel{
         }
         else {
             this.removeButton(".carousel__pagination__IsMobile__button")
-            // normalement demarre a 0
-            for (let i = 1; i < this.items.length; i = i + this.slidesToScroll)
+            for (let i = 0; i < ((this.items.length - 2 * this.offset) - this.start); i = i + this.slidesToScroll)
             {
                 let button = this.createDivWithClass('carousel__pagination__button')
-                button.addEventListener('click', () => this.gotoItem(i))
+                button.addEventListener('click', () => this.gotoItem(i + this.offset))
                 pagination.appendChild(button)
                 buttons.push(button);
             }
             this.onMove(index => {
-                let activeButton = buttons[Math.floor(index / this.slidesToScroll)]
+               // let activeButton = buttons[Math.floor(((index - this.offset) % count ) / this.slidesToScroll)]
+               let activeButton = buttons[this.pagination]
+               console.log("activeButton :" + this.pagination)
                 if (activeButton) {
                     buttons.forEach(button => button.classList.remove('carousel__pagination__button--active'))
                     activeButton.classList.add('carousel__pagination__button--active')
@@ -174,22 +185,45 @@ class Carousel{
     }
 
     next(){
+        console.log("next")
+        this.pagination++
+        console.log(this.pagination)
+
+        if (this.pagination >= this.maxPagination){
+            this.pagination = 0
+            console.log("fonction :" + this.pagination)
+        }
         this.gotoItem(this.currentItem + this.slidesToScroll)
+        
     }
 
     prev(){
-        this.gotoItem(this.currentItem - this.slidesToScroll)
+        console.log("prev")
+        this.pagination--
+        console.log(this.pagination)
+        if (this.pagination < 0){
+            console.log("fonction :" + this.pagination)
+            console.log("start :" + this.start)
+            this.pagination = this.maxPagination - 1
+        }
+        this.gotoItem(this.currentItem - this.slidesToScroll) 
+        
+        
+        
+
+       
     }
 
     resetInfinite(index) {
         if (this.currentItem - this.slidesVisible <= this.options.slidesToScroll) {
-            this.gotoItem(this.currentItem + (this.items.length - 2 * this.offset - 1), false)
+            this.gotoItem(this.currentItem + (this.items.length - 2 * this.offset - 1), false)   
         }
         else if (this.currentItem >= this.itemsOld.length)
+  //     else if ((index - this.offset) > this.itemsOld.length)
         {
             //this.items.length - this.offset
-            console.log("scroll infinite")
             this.gotoItem(this.currentItem - (this.items.length - 2 * this.offset - 1), false)
+
         }
     }
 
@@ -207,13 +241,14 @@ class Carousel{
             }
             else
                 return 
+            
         } else if(index >= this.items.length || 
                 (this.items[this.currentItem + this.slidesVisible] === undefined &&
                 index > this.currentItem)) {
-                if (this.options.loop)
-                    index = 0
-                else
-                    return
+            if (this.options.loop)
+                index = 0
+            else
+                return
         }
         if (animation === false) {
             this.container.style.transition = 'none'
@@ -225,17 +260,11 @@ class Carousel{
             this.container.style.transition = ''
         }
 
-        console.log("currentItem" + this.currentItem)
-        console.log("index :" + index)
-        console.log("offset :" + this.offset)
-
         //test pas event of transition3d
         if ((index - this.offset + this.slidesVisible) < 0 || (index - this.offset) >= this.itemsOld.length)
         {
-            console.log("transition")
             this.resetInfinite(index)
         }
-            
         this.currentItem = index
         this.moveCallbacks.forEach(cb => cb(index))
     }
@@ -294,7 +323,7 @@ let onReady = function() {
         infinite: false
     })
     new Carousel(document.querySelector('#carousel2'), {
-        slidesVisible: 3,
+        slidesVisible: 2,
         slidesToScroll: 2,
         loop: true,
         pagination: true,
