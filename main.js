@@ -39,7 +39,7 @@ app.on('ready', function() {
     mainWindow = new BrowserWindow({width: 900, height: 600});
 
     // and load the app's front controller. Feel free to change with app_dev.php
-    mainWindow.loadURL("http://127.0.0.1:8000/account");
+    mainWindow.loadURL("http://127.0.0.1:8000");
 
     // Uncomment to open the DevTools.
     //mainWindow.webContents.openDevTools();
