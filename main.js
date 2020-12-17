@@ -2,6 +2,9 @@
 const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
+const path = require("path");
+
+
 
 var gulp = require('gulp'),
     connect = require('gulp-connect-php'),
@@ -36,7 +39,14 @@ app.on('window-all-closed', function () {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 900, height: 600});
+    mainWindow = new BrowserWindow({
+        width: 900, 
+        height: 600,
+        webPreferences: {
+            devTools:false
+        },
+        icon: path.join(__dirname, "/assets/img/netflix_windows.png")
+    });
 
     // and load the app's front controller. Feel free to change with app_dev.php
     mainWindow.loadURL("http://127.0.0.1:8000");
