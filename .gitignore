@@ -2,3 +2,4 @@ node_modules/
 *.xml
 .idea/netflixElectron.iml
 netflixelectron-win32-x64
+netflixelectron-win32-x64.rar
